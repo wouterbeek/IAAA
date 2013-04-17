@@ -1,0 +1,105 @@
+* {
+    cursor: pointer;
+    direction: ltr;
+    position: static;
+    unicode-bidi: normal;
+    visibility: visible;
+  }
+
+author, pbody, phead, line, poem, stanza, ptitle { display: block; }
+first-author, last-auhtor { display: inline; }
+
+
+
+/* The title of the poem. */
+
+title {
+  font-family: serif;
+  text-transform: capitalize;
+}
+
+/* For printing we dumb things down a bit. */
+@media print {
+  ptitle {
+    font-size: 400%;
+  }
+}
+
+@media screen {
+  ptitle {
+    color: #dfdfdf;
+    background-color: #191922;
+    font-size: 800%;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: normal;
+    text-align: left;
+    text-indent: 2.5%;
+  }
+  phead:hover > title {
+    direction: rtl;
+    text-align: right;
+    text-indent: 2.5%;
+  }
+}
+
+
+
+/* The author of the poem. */
+
+author {
+  font-family: serif;
+}
+
+/* For printing we dumb things down a bit. */
+@media print {
+  author {
+    font-size: 200%;
+  }
+}
+
+/* We distinguish between two stated: (1) right aligned (default).
+   (2) Left aligned, only when hovered. */
+/* Here we encounter a peculiarity of the Firefox browser (not tested on
+   other UAs), namely that indentation is absent under right alignment. We
+   hack this by reversing directionality. */
+@media screen {
+  author {
+    background-color: #dfdfdf;
+    color: #191922;
+    direction: rtl;
+    font-size: 400%;
+    text-align: right;
+    text-indent: 2.5%;
+  }
+  phead:hover > author{
+    direction: ltr;
+    text-align: left;
+    text-indent: 5%;
+  }
+}
+
+
+
+/* The very first letter of the poem's body is distinctively typeset. */
+pbody stanza:first-child line:first-child:first-letter { font-size: 200%; }
+
+pbody stanza:first-child { margin-top: 1cm; }
+
+/* Each stanza takes a bit of space from the other stanza's. */
+/* We distinguish between margin and padding, since we do not want the hover
+   to background color to cover too large a surface. */
+stanza {
+  font-family: serif;
+  font-size: 1.2em;
+  letter-spacing: 0.025em;
+  margin: 0.2cm 0.2cm 0.2cm 10%;
+  padding: 0.2cm 0.2cm 0.2cm 0.2cm;
+  width: 100%;
+  word-spacing: 0.02em;
+}
+
+@media screen {
+  stanza:hover { background-color: #e9e9e9; }
+}
+

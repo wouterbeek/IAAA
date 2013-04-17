@@ -1,0 +1,11 @@
+<!DOCTYPE poem
+[
+  <!ELEMENT poem (phead,pbody)>
+  <!ELEMENT phead (ptitle,author)>
+  <!ELEMENT ptitle (#PCDATA)>
+  <!ELEMENT author (#PCDATA)>
+  <!ELEMENT pbody (stanza)>
+  <!ELEMENT stanza (line)>
+  <!ELEMENT line (#PCDATA)>
+]>
+
