@@ -1,7 +1,9 @@
 :- module(
-  poems_web,
+  iaaa,
   [
-    poems_web/1 % -Markup:list
+    poem_web/2, % +Name:atom
+                % -XML:dom
+    poems_web/1 % -Markup:dom
   ]
 ).
 
@@ -51,6 +53,7 @@ So long lives this, and this gives life to thee.
 :- assert_novel(user:prolog_file_type(xml, xml)).
 
 % Use modules in Web interface.
+:- register_module(iaaa).
 :- register_module(schaakbord).
 :- register_module(queneau).
 
@@ -72,14 +75,24 @@ http:location(css, root(css), []).
 
 
 index(Request):-
-  memberchk(path_info(Path), Request),
-  absolute_file_name(data(Path), File, [access(read), file_type(xml)]),
-  file_to_xml(File, Poem),
+  memberchk(path_info(Name), Request),
+  poem_web(Name, XML),
   !,
-  reply_html_page(poem, Poem, Poem).
+  reply_html_page(poem, XML, XML).
 index(_Request):-
   poems_web(Markup),
   reply_html_page(poems, [], Markup).
+
+%% poem_web(+Name:atom, -XML:dom) is det.
+% Returns the DOM representing a poem.
+%
+% @param Name The atomic name of a poem, corresponding to the file name of
+%        a poem that is in the data subdirectory.
+% @param XML A list of XML DOM.
+
+poem_web(Name, XML):-
+  absolute_file_name(data(Name), File, [access(read), file_type(xml)]),
+  file_to_xml(File, XML).
 
 % How can we push the XML poems to Wallace without redrawing the entire page?
 % push(console_output, poem, poem, DOM).
