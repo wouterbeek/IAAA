@@ -51,6 +51,9 @@ So long lives this, and this gives life to thee.
 :- http_handler(http_root(poem), poem, [prefix]).
 :- http_handler(http_root(poem_dummy), poem_dummy, [prefix]).
 
+% TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+%    % This should be loaded on the fly.
+%    \html_requires(css('poem.css'))
 
 
 poem(Request):-
