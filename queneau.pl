@@ -14,14 +14,24 @@
 1,000,000,000,000,000 by Raymond Queneau.
 
 @author Wouter Beek
-@version 2012/10, 2012/12, 2013/02-2013/03
+@version 2012/10, 2012/12, 2013/02-2013/04
 */
 
+:- use_module(library(http/http_dispatch)).
+:- use_module(library(http/http_path)).
 :- use_module(math(math_ext)).
-:- use_module(server(poems_web)).
+:- use_module(project(poem)).
 :- use_module(standards(http)).
 
-:- http_handler(http_root(queneau), queneau, [prefix]).
+% Serve CSS files.
+http:location(css, root(css), []).
+:- assert(user:file_search_path(css, project(css))).
+:- http_handler(css(.), serve_files_in_directory(css), [prefix]).
+:- html_resource(css('poem.css'), []).
+
+% HTTP handler.
+http:location(poem, root(poem), []).
+:- http_handler(poem(queneau), queneau, [prefix]).
 
 
 

@@ -19,12 +19,12 @@ Hec est domus ultima / Dit is het laatste huis
 @tbd Add CSS: (1) cell height = cell width, (2) per-cell highlight.
 */
 
-:- use_module(generic(list_ext)).
+:- use_module(generics(list_ext)).
+:- use_module(html(html)).
 :- use_module(math(math_ext)). % Used by meta-predicates.
-:- use_module(standards(html)).
 :- use_module(standards(markup)).
 :- use_module(standards(standards)).
-:- use_module(standards(svg)).
+:- use_module(svg(svg)).
 
 
 

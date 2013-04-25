@@ -1,14 +1,31 @@
-% Thhe load file for the IAAA project.
-% This uses the Prolog Generics Collection as a Git submodule.
+% The load file for the IAAA project.
 
-load:-
-  source_file(load, ThisFile),
+project_name('IAAA').
+
+load_iaaa:-
+  % Do not write module loads to the standard output stream.
+  set_prolog_flag(verbose_load, silent),
+  
+  % Project directory.
+  source_file(load_iaaa, ThisFile),
   file_directory_name(ThisFile, ThisDirectory),
   assert(user:file_search_path(project, ThisDirectory)),
+  
+  % Assert data subdirectory.
+  assert(user:file_search_path(data, project('Data'))),
   
   % Assert the PGC file search path.
   assert(user:file_search_path(pgc, project('PGC'))),
   % Load the PGC load file.
-  ensure_loaded(pgc(load)).
+  (
+    predicate_property(debug, visible)
+  ->
+    ensure_loaded(pgc(debug))
+  ;
+    ensure_loaded(pgc(load))
+  ),
+  
+  % Load the IAAA module.
+  ensure_loaded(project(iaaa)).
+:- load_iaaa.
 
-:- load.
