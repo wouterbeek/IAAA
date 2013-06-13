@@ -14,7 +14,7 @@
 @version 2013/04
 */
 
-:- use_module(standards(xml)).
+:- use_module(xml(xml)).
 
 
 

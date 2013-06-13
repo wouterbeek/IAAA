@@ -3,20 +3,16 @@
 project_name('IAAA').
 
 load_iaaa:-
-  % Do not write module loads to the standard output stream.
-  set_prolog_flag(verbose_load, silent),
-  
-  % Project directory.
   source_file(load_iaaa, ThisFile),
   file_directory_name(ThisFile, ThisDirectory),
   assert(user:file_search_path(project, ThisDirectory)),
+  assert(user:file_search_path(iaaa, ThisDirectory)),
   
   % Assert data subdirectory.
-  assert(user:file_search_path(data, project('Data'))),
+  assert(user:file_search_path(data, iaaa('Data'))),
   
-  % Assert the PGC file search path.
-  assert(user:file_search_path(pgc, project('PGC'))),
-  % Load the PGC load file.
+  % Load the PGC.
+  assert(user:file_search_path(pgc, iaaa('PGC'))),
   (
     predicate_property(debug, visible)
   ->
@@ -26,6 +22,6 @@ load_iaaa:-
   ),
   
   % Load the IAAA module.
-  ensure_loaded(project(iaaa)).
+  ensure_loaded(iaaa(iaaa)).
 :- load_iaaa.
 

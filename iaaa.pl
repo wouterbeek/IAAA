@@ -11,7 +11,9 @@
 
 Web front-end for poems.
 
-<sonnet>
+---+ Let's read a poem!
+
+~~~{.txt}
 Shall I compare thee to a summer's day?
 Thou art more lovely and more temperate:
 Rough winds do shake the darling buds of May,
@@ -26,31 +28,27 @@ Nor shall death brag thou wander'st in his shade,
 When in eternal lines to time thou grow'st,
 So long as men can breathe, or eyes can see,
 So long lives this, and this gives life to thee.
-</sonnet>
+~~~
 
 @author Wouter Beek
-@version 2012/12, 2013/02-2013/04
+@version 2012/12, 2013/02-2013/04, 2013/06
 */
 
 :- use_module(generics(db_ext)).
 :- use_module(generics(file_ext)).
+:- use_module(iaaa(schaakbord)). % Registered module.
+:- use_module(iaaa(queneau)). % Registered module.
 :- use_module(library(http/html_head)).
 :- use_module(library(http/html_write)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_path)).
 :- use_module(library(http/http_server_files)).
-:- use_module(library(http/http_session)).
 :- use_module(library(xpath)).
-:- use_module(project(poem)).
-:- use_module(project(schaakbord)).
-:- use_module(project(queneau)).
-:- use_module(server(wallace)).
 :- use_module(server(web_console)).
-:- use_module(standards(http)).
-:- use_module(standards(xml)).
+:- use_module(xml(xml)).
 
 % Register the XML file type.
-:- assert_novel(user:prolog_file_type(xml, xml)).
+:- db_add_novel(user:prolog_file_type(xml, xml)).
 
 % Use modules in Web interface.
 :- register_module(iaaa).
@@ -58,19 +56,15 @@ So long lives this, and this gives life to thee.
 :- register_module(queneau).
 
 % Serve CSS files.
-http:location(css, root(css), []).
-:- assert(user:file_search_path(css, project(css))).
+:- db_add_novel(http:location(css, root(css), [])).
+:- assert(user:file_search_path(css, iaaa(css))).
 :- http_handler(css(.), serve_files_in_directory(css), [prefix]).
 
 % Assert the project-specific DTD file location.
-:- assert(user:file_search_path(dtd, project(dtd))).
+:- assert(user:file_search_path(dtd, iaaa(dtd))).
 
 % HTTP handler for the index.
 :- http_handler(root(.), index, [prefix]).
-
-% HTTP handler for displaying individual poems.
-%http:location(poem, root(poem), []).
-%:- http_handler(poem(.), poem, [prefix]).
 
 
 

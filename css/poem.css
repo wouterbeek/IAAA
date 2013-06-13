@@ -5,10 +5,10 @@
     visibility: visible;
   }
 
-div.author, div.pbody, div.phead, div.line, div.poem, div.stanza, div.ptitle {
+author, pbody, phead, line, poem, stanza, ptitle {
   display: block;
 }
-div.first-author, div.last-author {
+first-author, last-author {
   display: inline;
 }
 
@@ -16,20 +16,20 @@ div.first-author, div.last-author {
 
 /* The title of the poem. */
 
-div.ptitle {
+ptitle {
   font-family: serif;
   text-transform: capitalize;
 }
 
 /* For printing we dumb things down a bit. */
 @media print {
-  div.ptitle {
+  ptitle {
     font-size: 400%;
   }
 }
 
 @media screen {
-  div.ptitle {
+  ptitle {
     color: #dfdfdf;
     background-color: #191922;
     font-size: 800%;
@@ -39,7 +39,7 @@ div.ptitle {
     text-align: left;
     text-indent: 2.5%;
   }
-  div.phead:hover > div.ptitle {
+  phead:hover > ptitle {
     direction: rtl;
     text-align: right;
     text-indent: 2.5%;
@@ -50,13 +50,13 @@ div.ptitle {
 
 /* The author of the poem. */
 
-div.author {
+author {
   font-family: serif;
 }
 
 /* For printing we dumb things down a bit. */
 @media print {
-  div.author {
+  author {
     font-size: 200%;
   }
 }
@@ -67,7 +67,7 @@ div.author {
    other UAs), namely that indentation is absent under right alignment. We
    hack this by reversing directionality. */
 @media screen {
-  div.author {
+  author {
     background-color: #dfdfdf;
     color: #191922;
     direction: rtl;
@@ -75,7 +75,7 @@ div.author {
     text-align: right;
     text-indent: 2.5%;
   }
-  div.phead:hover > div.author{
+  phead:hover > author{
     direction: ltr;
     text-align: left;
     text-indent: 5%;
@@ -85,18 +85,18 @@ div.author {
 
 
 /* The very first letter of the poem's body is distinctively typeset. */
-div.pbody div.stanza:first-child div.line:first-child:first-letter {
+pbody stanza:first-child line:first-child:first-letter {
   font-size: 200%;
 }
 
-div.pbody div.stanza:first-child {
+pbody stanza:first-child {
   margin-top: 1cm;
 }
 
 /* Each stanza takes a bit of space from the other stanza's. */
 /* We distinguish between margin and padding, since we do not want the hover
    to background color to cover too large a surface. */
-div.stanza {
+stanza {
   font-family: serif;
   font-size: 1.2em;
   letter-spacing: 0.025em;
@@ -107,7 +107,9 @@ div.stanza {
 }
 
 @media screen {
-  div.stanza:hover { background-color: #e9e9e9; }
+  stanza:hover {
+    background-color: #e9e9e9;
+  }
 }
 
 

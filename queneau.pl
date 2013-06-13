@@ -14,24 +14,28 @@
 1,000,000,000,000,000 by Raymond Queneau.
 
 @author Wouter Beek
-@version 2012/10, 2012/12, 2013/02-2013/04
+@version 2012/10, 2012/12, 2013/02-2013/04, 2013/06
 */
 
+:- use_module(generics(db_ext)).
+:- use_module(iaaa(poem)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_path)).
 :- use_module(math(math_ext)).
-:- use_module(project(poem)).
 :- use_module(standards(http)).
 
 % Serve CSS files.
-http:location(css, root(css), []).
-:- assert(user:file_search_path(css, project(css))).
-:- http_handler(css(.), serve_files_in_directory(css), [prefix]).
-:- html_resource(css('poem.css'), []).
+:- db_add_novel(http:location(css, root(css), [])).
+:- assert(user:file_search_path(iaaa_css, iaaa(css))).
+:- http_handler(
+     css(.),
+     serve_files_in_directory(iaaa_css),
+     [prefix, priority(10)]
+   ).
+:- html_resource(css('poem.css'), [requires(css('wallace.css'))]).
 
 % HTTP handler.
-http:location(poem, root(poem), []).
-:- http_handler(poem(queneau), queneau, [prefix]).
+:- http_handler(root(queneau), queneau, [prefix]).
 
 
 
@@ -194,7 +198,7 @@ line(0, 14, 'The best of all things to an end must come').
 %% generate(+Choices:list(integer), -DOM_Triple) is det.
 % Generates one of the poems.
 
-queneau(Title, poem/poem/DOM):-
+queneau(Title, poem/DOM):-
   atom_chars(Title, Chars),
   maplist(atom_number, Chars, Choices),
   numlist(1, 14, PoemNumbers),
@@ -220,12 +224,11 @@ queneau(Request):-
     atom_concat('/', Path, Path0),
     sub_atom(Path, 0, 14, _After, Title)
   ->
-    queneau(Title, DTD/CSS/DOM),
-    serve_xml(DTD, CSS, DOM)
+    queneau(Title, DTD/DOM)
   ;
-    random_queneau(DTD/CSS/DOM),
-    serve_xml(DTD, CSS, DOM)
-  ).
+    random_queneau(DTD/DOM)
+  ),
+  serve_xml(DTD, DOM).
 
 %% queneau_web(-Markup:list) is det.
 % Returns the markup for a poem.
