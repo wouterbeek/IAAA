@@ -11,7 +11,7 @@
 
 Web front-end for poems.
 
----+ Let's read a poem!
+# Let's read a poem!
 
 ~~~{.txt}
 Shall I compare thee to a summer's day?
