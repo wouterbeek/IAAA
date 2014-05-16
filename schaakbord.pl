@@ -15,15 +15,13 @@ Tendimus huc omnes / (Naar) hier gaan we allemaal
 Hec est domus ultima / Dit is het laatste huis
 
 @author Wouter Beek
-@version 2011, 2012/10, 2013/03
+@version 2011, 2012/10, 2013/03, 2014/05
 @tbd Add CSS: (1) cell height = cell width, (2) per-cell highlight.
 */
 
 :- use_module(generics(list_ext)).
 :- use_module(html(html)).
 :- use_module(math(math_ext)). % Used by meta-predicates.
-:- use_module(standards(markup)).
-:- use_module(standards(standards)).
 :- use_module(svg(svg)).
 
 
@@ -36,8 +34,8 @@ board_web([SVG_Root]):-
 
   schaakboard(Rows),
 
-  format_number(Height, cm, Height_cm),
-  format_number(Width, cm, Width_cm),
+  atomic_list_concat([Height,cm], Height_cm),
+  atomic_list_concat([Width,cm], Width_cm),
   findall(
     element(
       rect,
@@ -56,9 +54,9 @@ board_web([SVG_Root]):-
       nth0(I, Rows, Row),
       nth0(J, Row, _Sentence),
       X is I * Height + XBorder,
-      format_number(X, cm, X_cm),
+      atomic_list_concat([X,cm], X_cm),
       Y is J * Width + YBorder,
-      format_number(Y, cm, Y_cm)
+      atomic_list_concat([Y,cm], Y_cm)
     ),
     SVG_Body
   ),
