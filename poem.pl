@@ -15,8 +15,6 @@
 @version 2013/04, 2014/05
 */
 
-:- use_module(standards(css), [attribute_value/3 as css_attribute_value]).
-:- use_module(xml(xml)).
 
 
 
@@ -25,13 +23,11 @@
 html_integer_size_sequence([]) --> !, [].
 html_integer_size_sequence([H|T]) -->
   FontSize is 100 + 10 * H,
-  atomic_list_concat([FontSize,'%'], FontSize_pct),
-  css_attribute_value('font-size', FontSize_pct, Style),
+  format(atom(Style), 'font-size: ~d%', [FontSize]),
   html([
-    span([style=Style], [H]),
+    span(style(Style), H),
     \html_integer_size_sequence(T)
   ]).
-
 
 poem_dom(
   Title,
@@ -64,7 +60,3 @@ poem_dom(
     ),
     Stanzas
   ).
-
-  ]
-).
-

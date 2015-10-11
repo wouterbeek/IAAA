@@ -14,28 +14,13 @@
 1,000,000,000,000,000 by Raymond Queneau.
 
 @author Wouter Beek
-@version 2012/10, 2012/12, 2013/02-2013/04, 2013/06
+@version 2015/10
 */
 
-:- use_module(generics(db_ext)).
-:- use_module(iaaa(poem)).
 :- use_module(library(http/http_dispatch)).
 :- use_module(library(http/http_path)).
-:- use_module(math(math_ext)).
-:- use_module(standards(http)).
 
-% Serve CSS files.
-:- db_add_novel(http:location(css, root(css), [])).
-:- assert(user:file_search_path(iaaa_css, iaaa(css))).
-:- http_handler(
-     css(.),
-     serve_files_in_directory(iaaa_css),
-     [prefix, priority(10)]
-   ).
-:- html_resource(css('poem.css'), [requires(css('wallace.css'))]).
-
-% HTTP handler.
-:- http_handler(root(queneau), queneau, [prefix]).
+:- http_handler('/queneau', queneau, [prefix]).
 
 
 
