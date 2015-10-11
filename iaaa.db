@@ -1,0 +1,11 @@
+%	Abbreviation of the Web site.
+setting(sb_settings:abbr, 'IAAA').
+
+%	Description of the Web site.
+setting(sb_settings:description, 'Institute for Artificial Art Amsterdam').
+
+% Natural language preferences.
+setting(sb_settings:language_priority_list, [nl,'en-US']).
+
+%	Title of the Web site.
+setting(sb_settings:title, 'Institute for Artificial Art Amsterdam').

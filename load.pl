@@ -1,27 +1,22 @@
-% The load file for the IAAA project.
+% Load AAAI Web site.
 
-project_name('IAAA').
+:- use_module(library(html/html_resource)).
+:- use_module(library(http/http_server)).
+:- use_module(library(http/http_session)).
+:- use_module(library(sb/sb_init)).
+:- use_module(library(sb/sb_settings)).
+:- use_module(library(settings)).
 
-load_iaaa:-
-  source_file(load_iaaa, ThisFile),
-  file_directory_name(ThisFile, ThisDirectory),
-  assert(user:file_search_path(project, ThisDirectory)),
-  assert(user:file_search_path(iaaa, ThisDirectory)),
-  
-  % Assert data subdirectory.
-  assert(user:file_search_path(data, iaaa('Data'))),
-  
-  % Load the PGC.
-  assert(user:file_search_path(pgc, iaaa('PGC'))),
-  (
-    predicate_property(debug, visible)
-  ->
-    ensure_loaded(pgc(debug))
-  ;
-    ensure_loaded(pgc(load))
-  ),
-  
-  % Load the IAAA module.
-  ensure_loaded(iaaa(iaaa)).
-:- load_iaaa.
+:- start_server.
 
+:- load_settings('iaaa.db').
+
+:- dynamic(user:file_search_path/2).
+:- multifile(user:file_search_path/2).
+
+user:file_search_path(css, resource/css).
+user:file_search_path(dtd, resource/dtd).
+
+:- html_resource(css(poem), [requires([css('poem.css')]),virtual(true)]).
+
+:- use_module(iaaa).
