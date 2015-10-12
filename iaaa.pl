@@ -27,85 +27,37 @@ So long lives this, and this gives life to thee.
 @version 2015/10
 */
 
-:- use_module(library(html/html_default)).
 :- use_module(library(html/element/html_link)).
 :- use_module(library(html/element/html_list)).
-:- use_module(library(http/html_head)).
 :- use_module(library(http/html_write)).
 :- use_module(library(http/http_dispatch)).
-:- use_module(library(http/http_server_files)).
-:- use_module(library(sgml)).
-:- use_module(library(xpath)).
 
-:- http_handler(/, poem, [prefix]).
+:- use_module(iaaa_style).
+:- use_module(poem_db).
+:- use_module(queneau).
+:- use_module(schaakbord).
 
-
-
-
-
-poem(Req):-
-  memberchk(path_info(Name), Req),
-  atomic_list_concat([db,poem,Name], /, SubPath),
-  absolute_file_name(
-    SubPath,
-    File,
-    [access(read),extensions([xml]),file_errors(fail)]
-  ), !,
-  load_html(File, Dom, []),
-  reply_html_page(poem, html(\poem_heading(Dom)), Dom).
-poem(_):-
-  reply_html_page(poem, html('Poem overview'), html(\poem_overview)).
-
-poem_overview -->
-  {
-    absolute_file_name('db/poem', Dir, [access(read),file_type(directory)]),
-    directory_file_path(Dir, '*.xml', Wildcard),
-    expand_file_name(Wildcard, Paths)
-  },
-  html([
-    div(class(ptitle), 'Poems'),
-    \html_list(Paths, [item_writer(poem_entry),ordered(true)])
-  ]).
-
-poem_entry(Path) -->
-  {
-    dtd(poem, Dtd),
-    load_xml(Path, Dom, [dtd(Dtd)]),
-    path_link(Path, Link)
-  },
-  html_link(Link, poem_heading(Dom)).
+:- http_handler(/, iaaa, [prefix]).
 
 
 
-% HELPERS %
-
-poem_author(Dom) -->
-  {
-    FN =.. ['first-name', text],
-    xpath(Dom, //FN, FirstName),
-    LN =.. ['last-name', text],
-    xpath(Dom, //LN, LastName)
-  },
-  html([FirstName,' ',LastName]).
-
-poem_heading(Dom) -->
-  html([\poem_author(Dom),' - ',\poem_title(Dom)]).
-
-path_link(Path, Link):-
-  file_base_name(Path, Base),
-  file_name_extension(Base0, xml, Base),
-  http_link_to_id(poem, path_postfix(Base0), Link).
-
-poem_title(Dom) -->
-  {xpath(Dom, //ptitle(text), Title)},
-  html(Title).
 
 
+% HTTP HANDLER %
 
-% HTML GENERATION %
+%! iaaa(+Request:list(compound)) is det.
 
-user:body(poem, Content) -->
-  user:body(default, Content).
+iaaa(_):-
+  reply_html_page(iaaa,
+    html(title(["IAAA",\sep,"Instititute for Artificial Art Amsterdam"])),
+    html(
+      \html_list(
+        [poem,queneau,schaakbord],
+        [item_writer(handler_link),ordered(false)]
+      )
+    )
+  ).
 
-user:head(poem, Content) -->
-  user:head(default, html([\html_requires(css('poem.css'))|Content])).
+handler_link(HandlerId) -->
+  {http_link_to_id(HandlerId, [], Link)},
+  html_link(Link, HandlerId).

@@ -20,3 +20,4 @@ user:file_search_path(dtd, resource/dtd).
 :- html_resource(css(poem), [requires([css('poem.css')]),virtual(true)]).
 
 :- use_module(iaaa).
+:- use_module(queneau).

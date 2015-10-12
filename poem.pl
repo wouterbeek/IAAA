@@ -1,62 +1,45 @@
 :- module(
   poem,
   [
-    html_integer_size_sequence//1, % +IntegerSequence:list(nonneg)
-    poem_dom/4 % +Title:atom
-               % +Author:atom/atom
-               % +Sentences:list(atom)
-               % -Poem:list
+    poem//3 % :Author_2
+            % :Title_2
+            % +Stanzas:list(list(string))
   ]
 ).
 
-/** <module> POEM
+/** <module> Poem
 
 @author Wouter Beek
-@version 2013/04, 2014/05
+@version 2015/10
 */
 
+:- use_module(library(http/html_write)).
+
+:- html_meta(poem(html,html,+,?,?)).
 
 
 
-%! html_integer_sequence(+Sequence:list(integer)) is det.
 
-html_integer_size_sequence([]) --> !, [].
-html_integer_size_sequence([H|T]) -->
-  FontSize is 100 + 10 * H,
-  format(atom(Style), 'font-size: ~d%', [FontSize]),
-  html([
-    span(style(Style), H),
-    \html_integer_size_sequence(T)
-  ]).
 
-poem_dom(
-  Title,
-  FirstName/LastName,
-  Sentences
-  [
-    Stylesheet_PI,
-    element(poem, [], [
-      element(phead, [], [
-        element(ptitle, [], [Title]),
-        element(author, [], [
-          element(first-name, [], [FirstName]),
-          element(last-name, [], [LastName])
-        ])
+%! poem(:Author_2, :Title_2, +Stanzas:list(list(string)))// is det.
+
+poem(Author_2, Title_2, L) -->
+  html(
+    div(class(poem), [
+      div(class(head), [
+        div(class(title), Title_2),
+        div(class(author), Author_2)
       ]),
-      element(pbody, [], Stanzas)
+      \stanzas(L)
     ])
-  ]
-):-
-  stylesheet_pi(css('poem.css'), Stylesheet_PI),
-  findall(
-    element(stanza, [], Lines),
-    (
-      member(Sentences, Sentences0),
-      findall(
-        element(line, [], [Sentence]),
-        member(Sentence, Sentences),
-        Lines
-      )
-    ),
-    Stanzas
   ).
+
+stanzas([]) --> !, html([]).
+stanzas([H|T]) --> stanza(H), stanzas(T).
+
+stanza(L) --> html(div(class(stanza), \lines(L))).
+
+lines([]) --> !, html([]).
+lines([H|T]) --> line(H), lines(T).
+
+line(H) --> html(div(class(line), H)).
